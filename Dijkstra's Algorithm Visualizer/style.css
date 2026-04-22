@@ -1,0 +1,458 @@
+/* ─────────────────────────────────────────────
+   style.css — Dijkstra's Algorithm Visualizer
+───────────────────────────────────────────── */
+ 
+/* ── RESET & VARIABLES ── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+:root {
+  --bg:           #f5f4f0;
+  --surface:      #ffffff;
+  --border:       #e0ded8;
+  --text:         #1a1a18;
+  --muted:        #888882;
+  --accent:       #2563eb;
+  --accent-light: #dbeafe;
+  --green:        #16a34a;
+  --green-light:  #dcfce7;
+  --red:          #dc2626;
+  --red-light:    #fee2e2;
+  --orange:       #ea580c;
+  --orange-light: #ffedd5;
+  --node-default: #ffffff;
+  --node-border:  #d1cfc8;
+  --shadow:       0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:    0 4px 12px rgba(0,0,0,0.1);
+}
+ 
+body {
+  background: var(--bg);
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+}
+ 
+/* ── HEADER ── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+ 
+.logo {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+ 
+header h1 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+ 
+header p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 1px;
+}
+ 
+/* ── LAYOUT ── */
+.layout {
+  display: flex;
+  height: calc(100vh - 69px);
+}
+ 
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+ 
+.sidebar-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+ 
+.sidebar-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+ 
+/* ── BUTTONS ── */
+.btn {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+ 
+.btn:hover {
+  background: var(--bg);
+  border-color: #ccc;
+}
+ 
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+ 
+.btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+ 
+.btn-danger {
+  border-color: #fca5a5;
+  color: var(--red);
+}
+ 
+.btn-danger:hover {
+  background: var(--red-light);
+}
+ 
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+ 
+/* ── MODE BUTTONS ── */
+.mode-btns {
+  display: flex;
+  gap: 6px;
+}
+ 
+.mode-btn {
+  flex: 1;
+  padding: 7px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+  color: var(--muted);
+}
+ 
+.mode-btn.active {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+ 
+/* ── SPEED SLIDER ── */
+.speed-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+ 
+.speed-row label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  width: 36px;
+}
+ 
+input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+  height: 4px;
+  border-radius: 2px;
+}
+ 
+/* ── INFO BOX ── */
+.info-box {
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+ 
+.info-box b {
+  color: var(--text);
+}
+ 
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+ 
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text);
+}
+ 
+.leg-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+}
+ 
+/* ── DISTANCE TABLE ── */
+.dist-table {
+  width: 100%;
+  font-size: 0.78rem;
+  border-collapse: collapse;
+}
+ 
+.dist-table th {
+  text-align: left;
+  padding: 4px 6px;
+  color: var(--muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+ 
+.dist-table td {
+  padding: 4px 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+ 
+.dist-table tr.highlight td {
+  color: var(--accent);
+  font-weight: 600;
+}
+ 
+.dist-inf {
+  color: var(--muted);
+}
+ 
+/* ── CANVAS AREA ── */
+.canvas-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  background-image: radial-gradient(circle, #d0cec8 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+ 
+svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+ 
+/* ── SVG: EDGES ── */
+.edge-line {
+  stroke: #c8c6c0;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: stroke 0.2s;
+}
+ 
+.edge-line:hover {
+  stroke: #999;
+}
+ 
+.edge-line.visited {
+  stroke: #93c5fd;
+  stroke-width: 2.5;
+}
+ 
+.edge-line.path {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+ 
+.edge-weight {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  fill: #888;
+  pointer-events: none;
+  user-select: none;
+}
+ 
+.edge-weight-bg {
+  fill: var(--bg);
+}
+ 
+/* ── SVG: NODES ── */
+.node-circle {
+  fill: var(--node-default);
+  stroke: var(--node-border);
+  stroke-width: 2;
+  cursor: pointer;
+  transition: fill 0.2s, stroke 0.2s;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));
+}
+ 
+.node-circle:hover {
+  stroke: var(--accent);
+}
+ 
+.node-circle.start {
+  fill: var(--green-light);
+  stroke: var(--green);
+}
+ 
+.node-circle.end {
+  fill: var(--red-light);
+  stroke: var(--red);
+}
+ 
+.node-circle.visited {
+  fill: #eff6ff;
+  stroke: #93c5fd;
+}
+ 
+.node-circle.current {
+  fill: var(--orange-light);
+  stroke: var(--orange);
+}
+ 
+.node-circle.path {
+  fill: var(--accent-light);
+  stroke: var(--accent);
+}
+ 
+.node-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--text);
+  pointer-events: none;
+  user-select: none;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+ 
+.node-dist {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  fill: var(--muted);
+  pointer-events: none;
+  user-select: none;
+  text-anchor: middle;
+}
+ 
+/* ── STATUS BAR ── */
+.statusbar {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 0.8rem;
+  box-shadow: var(--shadow-md);
+  white-space: nowrap;
+  max-width: 80%;
+  text-align: center;
+  transition: all 0.3s;
+}
+ 
+.statusbar.success {
+  background: var(--green-light);
+  border-color: var(--green);
+  color: var(--green);
+}
+ 
+.statusbar.error {
+  background: var(--red-light);
+  border-color: var(--red);
+  color: var(--red);
+}
+ 
+.statusbar.info {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+ 
+/* ── EDGE WEIGHT POPUP ── */
+.weight-input-overlay {
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: var(--shadow-md);
+  display: none;
+  z-index: 100;
+  font-size: 0.82rem;
+}
+ 
+.weight-input-overlay.show {
+  display: block;
+}
+ 
+.weight-input-overlay input {
+  width: 70px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  outline: none;
+  margin-right: 6px;
+}
+ 
+.weight-input-overlay input:focus {
+  border-color: var(--accent);
+}
+ 
+.weight-input-overlay button {
+  padding: 5px 10px;
+  background: var(--accent);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.78rem;
+}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dijkstra's Algorithm Visualizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+ 
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="logo">D*</div>
+    <div>
+      <h1>Dijkstra's Algorithm</h1>
+      <p>Shortest path visualizer — weighted graph</p>
+    </div>
+  </header>
+ 
+  <!-- ── MAIN LAYOUT ── -->
+  <div class="layout">
+ 
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+ 
+      <!-- Mode Section -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">Mode</div>
+        <div class="mode-btns">
+          <button class="mode-btn active" id="mode-node" onclick="setMode('node')">+ Node</button>
+          <button class="mode-btn" id="mode-edge" onclick="setMode('edge')">→ Edge</button>
+        </div>
+        <div class="info-box" style="margin-top:10px;" id="mode-hint">
+          <b>Node mode:</b> click canvas to add a node. Click a node to set it as <b>Start</b> or <b>End</b>.
+        </div>
+      </div>
+ 
+      <!-- Run Section -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">Run</div>
+        <button class="btn btn-primary" id="btn-run" onclick="runDijkstra()">▶ Find Shortest Path</button>
+        <button class="btn" id="btn-step" onclick="stepMode()">⏭ Step Through</button>
+        <div class="speed-row">
+          <label>Speed</label>
+          <input type="range" id="spd" min="1" max="10" value="6" />
+        </div>
+      </div>
+ 
+      <!-- Graph Controls -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">Graph</div>
+        <button class="btn" onclick="loadPreset()">⬡ Load Example Graph</button>
+        <button class="btn btn-danger" onclick="clearGraph()">✕ Clear All</button>
+      </div>
+ 
+      <!-- Distance Table -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">Distances</div>
+        <table class="dist-table" id="dist-table">
+          <thead>
+            <tr><th>Node</th><th>Distance</th><th>Via</th></tr>
+          </thead>
+          <tbody id="dist-body">
+            <tr><td colspan="3" style="color:var(--muted);padding:6px">Run to see distances</td></tr>
+          </tbody>
+        </table>
+      </div>
+ 
+      <!-- Legend -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">Legend</div>
+        <div class="legend">
+          <div class="leg-item">
+            <div class="leg-dot" style="background:var(--green-light);border-color:var(--green)"></div> Start node
+          </div>
+          <div class="leg-item">
+            <div class="leg-dot" style="background:var(--red-light);border-color:var(--red)"></div> End node
+          </div>
+          <div class="leg-item">
+            <div class="leg-dot" style="background:var(--orange-light);border-color:var(--orange)"></div> Current node
+          </div>
+          <div class="leg-item">
+            <div class="leg-dot" style="background:#eff6ff;border-color:#93c5fd"></div> Visited
+          </div>
+          <div class="leg-item">
+            <div class="leg-dot" style="background:var(--accent-light);border-color:var(--accent)"></div> Shortest path
+          </div>
+        </div>
+      </div>
+ 
+    </div><!-- /sidebar -->
+ 
+    <!-- CANVAS AREA -->
+    <div class="canvas-area" id="canvas-area">
+ 
+      <svg id="svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="20" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#c8c6c0"/>
+          </marker>
+          <marker id="arrow-path" markerWidth="8" markerHeight="8" refX="20" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="var(--accent)"/>
+          </marker>
+          <marker id="arrow-visited" markerWidth="8" markerHeight="8" refX="20" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#93c5fd"/>
+          </marker>
+        </defs>
+        <g id="edges-g"></g>
+        <g id="nodes-g"></g>
+      </svg>
+ 
+      <!-- Status Bar -->
+      <div class="statusbar" id="statusbar">
+        Click canvas to add nodes → connect them with edges → run the algorithm
+      </div>
+ 
+      <!-- Edge Weight Popup -->
+      <div class="weight-input-overlay" id="weight-popup">
+        <div style="margin-bottom:6px;font-weight:600;font-size:0.8rem;">Edge weight</div>
+        <input type="number" id="weight-val" min="1" max="99" value="1" placeholder="1–99" />
+        <button onclick="confirmEdge()">Add</button>
+      </div>
+ 
+    </div><!-- /canvas-area -->
+ 
+  </div><!-- /layout -->
+ 
+  <script src="script.js"></script>
+</body>
+</html>
+ 
